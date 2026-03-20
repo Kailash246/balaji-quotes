@@ -28,21 +28,26 @@
         .btn { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; color: white; }
         .btn-add { background: var(--brand-orange); }
         .btn-save { background: #10b981; }
-        .btn-qr { background: #6366f1; } /* Indigo */
+        .btn-qr { background: #6366f1; }
         .btn-print { background: var(--primary); }
 
-        /* History Table Action Buttons */
+        /* History Table UI & Colored Buttons */
+        .history-container { overflow-x: auto; max-width: 1000px; margin: 0 auto; }
+        .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; }
+        .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .history-table th { background: var(--primary); color: white; font-size: 11px; text-transform: uppercase; }
+        
         .action-btn { padding: 5px 10px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; color: white; font-weight: 700; margin-right: 5px; }
-        .btn-edit { background: #6366f1; } /* Indigo */
-        .btn-del { background: #ef4444; }  /* Red */
+        .btn-edit { background: #6366f1 !important; } /* Indigo */
+        .btn-del { background: #ef4444 !important; }  /* Red */
 
-        /* QR Modal Overlay */
+        /* QR Modal */
         #qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; color: white; padding: 20px; }
         #qr-code-container { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 
-        /* Quote Document Styling (Main Layout Preserved) */
+        /* Quote Document Styling */
         .doc-wrapper { overflow-x: auto; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-        #quote-paper { width: 210mm; min-width: 210mm; min-height: 297mm; margin: 0 auto; background: white; padding: 30px 40px; position: relative; overflow: hidden; }
+        #quote-paper { width: 210mm; min-width: 210mm; min-height: 297mm; margin: 0 auto; background: white; padding: 30px 40px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         #quote-paper::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: var(--brand-orange); }
 
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
@@ -72,7 +77,6 @@
         .premium-footer { margin-top: 30px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; }
         .terms p { margin: 2px 0; font-size: 10px; color: var(--slate); line-height: 1.4; }
 
-        /* History Table Card View (Mobile only) */
         @media (max-width: 768px) {
             .input-row { grid-template-columns: 1fr 1fr; }
             .button-group { flex-direction: column; }
@@ -85,7 +89,6 @@
             .history-table td::before { content: attr(data-label); font-weight: 800; text-transform: uppercase; font-size: 10px; color: var(--slate); }
         }
 
-        /* Strict Print Media (UI Hidden) */
         @media print { 
             body * { visibility: hidden !important; }
             .nav-tabs, .admin-panel, .button-group, .del-btn, #history-view, #cust-print-btn { display: none !important; }
@@ -99,7 +102,7 @@
 
     <div id="qr-modal" onclick="closeQR()">
         <div id="qr-code-container"></div>
-        <p style="font-weight: bold;">Scan to share this Quote (Secure Mode)</p>
+        <p style="font-weight: bold;">Scan to Share Quote (Secure Mode)</p>
         <button class="btn btn-print" style="margin-top: 10px; min-width: 100px;">Close</button>
     </div>
 
@@ -121,7 +124,12 @@
             <div class="input-row">
                 <input type="text" id="itemDesc" placeholder="Description">
                 <input type="number" id="itemQty" placeholder="Qty">
-                <select id="itemUnit"><option value="RFT">RFT</option><option value="SQFT">SQFT</option><option value="KG">KG</option><option value="PCS">PCS</option></select>
+                <select id="itemUnit">
+                    <option value="RFT">RFT</option>
+                    <option value="SQFT">SQFT</option>
+                    <option value="KG">KG</option>
+                    <option value="PCS">PCS</option>
+                </select>
                 <input type="number" id="itemRate" placeholder="Rate">
             </div>
             <textarea id="itemSpecs" rows="2" style="margin-top:10px;" placeholder="Specifications..."></textarea>
@@ -271,8 +279,10 @@
             const body = document.getElementById('historyBody'); body.innerHTML = '';
             quotesDb.forEach((q) => {
                 body.innerHTML += `<tr><td data-label="Quote ID">${q.id}</td><td data-label="Date">${q.date}</td><td data-label="Customer">${q.client}</td><td data-label="Amount">${q.total}</td>
-                    <td data-label="Actions"><button class="action-btn btn-edit" onclick="editQuote('${q.id}')">Edit</button>
-                    <button class="action-btn btn-del" onclick="deleteQuote('${q.id}')">Delete</button></td></tr>`;
+                    <td data-label="Actions">
+                        <button class="action-btn btn-edit" onclick="editQuote('${q.id}')">Edit</button>
+                        <button class="action-btn btn-del" onclick="deleteQuote('${q.id}')">Delete</button>
+                    </td></tr>`;
             });
         }
 
@@ -305,7 +315,6 @@
 
         function closeQR() { document.getElementById('qr-modal').style.display = "none"; }
 
-        // Secure Load for Customers
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const shareData = urlParams.get('share');
@@ -317,8 +326,6 @@
                     document.getElementById('dispClientAddr').innerText = decoded.addr;
                     items = decoded.items;
                     renderItems();
-                    
-                    // SECURITY LOCK: Remove all edit/input features
                     document.getElementById('mainNav').style.display = "none"; 
                     document.getElementById('adminPanel').style.display = "none";
                     document.getElementById('cust-print-btn').style.display = "block";
