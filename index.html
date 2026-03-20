@@ -3,48 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balaji Fabrication | Responsive Quote Software</title>
+    <title>Balaji Fabrication | Professional Quote Software</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #0f172a; --brand-orange: #ff851b; --slate: #64748b; --border: #e2e8f0; --bg-light: #f8fafc; }
         * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
         body { font-family: 'Inter', sans-serif; background: #cbd5e1; margin: 0; padding: 10px; color: var(--primary); font-size: 13px; }
 
-        /* Navigation & Containers */
+        /* Tabs & Controls */
         .nav-tabs { max-width: 1000px; margin: 0 auto 10px auto; display: flex; gap: 5px; }
         .tab-btn { padding: 10px 15px; border: none; background: #94a3b8; color: white; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 700; font-size: 12px; }
         .tab-btn.active { background: #fff; color: var(--brand-orange); }
 
         .admin-panel { max-width: 1000px; margin: 0 auto 20px auto; background: #fff; padding: 20px; border-radius: 0 12px 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        /* Form Layouts */
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
         .input-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
         input, select, textarea { padding: 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; width: 100%; }
         
-        /* Buttons in One Line */
         .button-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
         .btn { flex: 1; min-width: 150px; padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
         .btn-add { background: var(--brand-orange); color: white; }
         .btn-save { background: #10b981; color: white; }
         .btn-print { background: var(--primary); color: white; }
 
-        /* History Table UI */
-        .history-container { overflow-x: auto; }
-        .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; }
-        .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; min-width: 100px; }
-        .history-table th { background: var(--primary); color: white; font-size: 11px; text-transform: uppercase; }
-        
-        /* Action Button Colors Fixed */
+        /* History Action Buttons Colors */
         .action-btn { padding: 5px 10px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; color: white; font-weight: 700; margin-right: 5px; }
         .btn-edit { background: #6366f1 !important; }
         .btn-del { background: #ef4444 !important; }
 
-        /* Quote Document Styling (Fixed for PDF/Laptop Look) */
-        .doc-wrapper { overflow-x: auto; display: flex; justify-content: center; padding-bottom: 20px; }
+        /* Document Styling */
+        .doc-wrapper { overflow-x: auto; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
         #quote-paper { 
             width: 210mm; 
-            min-width: 210mm; /* Prevents mobile from shrinking it */
+            min-width: 210mm; 
             min-height: 297mm; 
             background: white; 
             padding: 30px 40px; 
@@ -80,11 +71,19 @@
         .premium-footer { margin-top: 30px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; }
         .terms p { margin: 2px 0; font-size: 10px; color: var(--slate); line-height: 1.4; }
 
-        /* Mobile Adjustments (UI Only - Document stays fixed) */
+        /* History Table UI */
+        .history-container { overflow-x: auto; max-width: 1000px; margin: 0 auto; }
+        .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; }
+        .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .history-table th { background: var(--primary); color: white; font-size: 11px; text-transform: uppercase; }
+
+        /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 768px) {
             .input-row { grid-template-columns: 1fr 1fr; }
             .button-group { flex-direction: column; }
-            .btn { width: 100%; }
+            .btn { width: 100%; min-width: unset; }
+            
+            /* History Card View on Mobile */
             .history-table thead { display: none; }
             .history-table, .history-table tbody, .history-table tr, .history-table td { display: block; width: 100%; }
             .history-table tr { margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; background: white; }
@@ -93,12 +92,21 @@
             .history-table td::before { content: attr(data-label); font-weight: 800; text-transform: uppercase; font-size: 10px; color: var(--slate); }
         }
 
+        /* --- PRINT FIXES --- */
         @media print { 
-            body { background: white; padding: 0; } 
-            .admin-panel, .nav-tabs, .del-btn, .doc-wrapper { padding: 0; }
-            .doc-wrapper { display: block; overflow: visible; }
-            #quote-paper { box-shadow: none; margin: 0; width: 100%; padding: 40px; } 
-            #history-view { display: none; } 
+            body { background: white !important; padding: 0 !important; margin: 0 !important; } 
+            .admin-panel, .nav-tabs, .del-btn, .button-group { display: none !important; } 
+            .doc-wrapper { display: block !important; overflow: visible !important; padding: 0 !important; }
+            #quote-paper { 
+                box-shadow: none !important; 
+                margin: 0 auto !important; 
+                width: 210mm !important; 
+                min-width: 210mm !important; 
+                padding: 40px !important; 
+                transform: none !important;
+                left: 0 !important;
+            } 
+            #history-view { display: none !important; } 
         }
     </style>
 </head>
@@ -142,7 +150,7 @@
                         <div class="brand-info">
                             <h1 class="brand-h1">Balaji Fabrication<br>& Hardware</h1>
                             <div class="exp-line">Serving with 20+ years of quality excellence </div>
-                            <p class="proprietor" style="font-weight:700; font-size:11px; margin-top:3px;">Proprietor: Birbal Ram </p>
+                            <p class="proprietor" style="font-weight:700; font-size:12px; margin-top:3px;">Proprietor: Birbal Ram </p>
                             <div style="font-size: 10px; font-weight: 700; border: 1.5px solid var(--brand-orange); padding: 2px 6px; display: inline-block; margin-top:4px; border-radius: 4px;">GSTIN: 29BGHP*****R3** </div>
                         </div>
                     </div>
@@ -234,10 +242,8 @@
             const unit = document.getElementById('itemUnit').value;
             const rate = parseFloat(document.getElementById('itemRate').value);
             if(!desc || isNaN(qty) || isNaN(rate)) return alert("Fill Description, Qty, and Rate.");
-
             document.getElementById('dispClientName').innerText = document.getElementById('clientName').value || "Valued Customer";
             document.getElementById('dispClientAddr').innerText = document.getElementById('clientAddr').value || "Site Address Details";
-
             items.push({ desc, specs, qty, unit, rate, total: qty * rate });
             renderItems();
             document.getElementById('itemDesc').value = ''; document.getElementById('itemSpecs').value = ''; 
@@ -319,7 +325,7 @@
             const originalTitle = document.title;
             document.title = fullId;
             window.print();
-            setTimeout(() => { document.title = originalTitle; }, 100);
+            setTimeout(() => { document.title = originalTitle; }, 500);
         }
 
         document.getElementById('qDate').innerText = new Date().toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
