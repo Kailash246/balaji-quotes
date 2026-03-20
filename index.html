@@ -29,20 +29,31 @@
         .btn-save { background: #10b981; color: white; }
         .btn-print { background: var(--primary); color: white; }
 
-        /* History Table */
+        /* History Table UI */
         .history-container { overflow-x: auto; }
         .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; }
         .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; min-width: 100px; }
         .history-table th { background: var(--primary); color: white; font-size: 11px; text-transform: uppercase; }
+        
+        /* Action Button Colors Fixed */
         .action-btn { padding: 5px 10px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; color: white; font-weight: 700; margin-right: 5px; }
-        .btn-edit { background: #6366f1; }
-        .btn-del { background: #ef4444; }
+        .btn-edit { background: #6366f1 !important; }
+        .btn-del { background: #ef4444 !important; }
 
-        /* Quote Document Styling */
-        #quote-paper { width: 210mm; min-height: 297mm; margin: 0 auto; background: white; padding: 30px 40px; position: relative; overflow: hidden; }
+        /* Quote Document Styling (Fixed for PDF/Laptop Look) */
+        .doc-wrapper { overflow-x: auto; display: flex; justify-content: center; padding-bottom: 20px; }
+        #quote-paper { 
+            width: 210mm; 
+            min-width: 210mm; /* Prevents mobile from shrinking it */
+            min-height: 297mm; 
+            background: white; 
+            padding: 30px 40px; 
+            position: relative; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
         #quote-paper::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: var(--brand-orange); }
 
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .logo-container img { height: 80px; width: auto; }
         .brand-h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; color: var(--primary); line-height: 1.1; }
@@ -56,8 +67,7 @@
         .centered-title { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .centered-title h2 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 34px; letter-spacing: 10px; color: var(--brand-orange); text-transform: uppercase; }
 
-        .table-wrap { overflow-x: auto; }
-        table.items-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        table.items-table { width: 100%; border-collapse: collapse; }
         .items-table th { text-align: left; padding: 10px 8px; font-size: 10px; text-transform: uppercase; color: var(--slate); border-bottom: 2px solid var(--primary); }
         .items-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: top; }
         .item-specs { font-size: 10px; color: var(--slate); font-weight: 400; margin-top: 3px; display: block; line-height: 1.2; font-style: italic; }
@@ -70,29 +80,23 @@
         .premium-footer { margin-top: 30px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; }
         .terms p { margin: 2px 0; font-size: 10px; color: var(--slate); line-height: 1.4; }
 
-        /* Mobile Adjustments */
+        /* Mobile Adjustments (UI Only - Document stays fixed) */
         @media (max-width: 768px) {
             .input-row { grid-template-columns: 1fr 1fr; }
             .button-group { flex-direction: column; }
             .btn { width: 100%; }
-            #quote-paper { width: 100%; min-height: auto; padding: 20px; }
-            .header { flex-direction: column; align-items: center; text-align: center; }
-            .header-left { flex-direction: column; margin-bottom: 15px; }
-            .header-right { text-align: center; }
-            .address-grid { grid-template-columns: 1fr; }
-            .addr-box:last-child { text-align: left !important; }
-            .centered-title h2 { font-size: 24px; letter-spacing: 5px; }
             .history-table thead { display: none; }
             .history-table, .history-table tbody, .history-table tr, .history-table td { display: block; width: 100%; }
             .history-table tr { margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; background: white; }
-            .history-table td { border: none; border-bottom: 1px solid #f8fafc; text-align: right; padding: 10px 5px; position: relative; display: flex; justify-content: space-between; align-items: center; }
+            .history-table td { border: none; border-bottom: 1px solid #f8fafc; text-align: right; padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; }
             .history-table td:last-child { border: none; justify-content: center; padding-top: 15px; }
             .history-table td::before { content: attr(data-label); font-weight: 800; text-transform: uppercase; font-size: 10px; color: var(--slate); }
         }
 
         @media print { 
             body { background: white; padding: 0; } 
-            .admin-panel, .nav-tabs, .del-btn { display: none !important; } 
+            .admin-panel, .nav-tabs, .del-btn, .doc-wrapper { padding: 0; }
+            .doc-wrapper { display: block; overflow: visible; }
             #quote-paper { box-shadow: none; margin: 0; width: 100%; padding: 40px; } 
             #history-view { display: none; } 
         }
@@ -121,7 +125,7 @@
                 <select id="itemUnit"><option value="RFT">RFT</option><option value="SQFT">SQFT</option><option value="PCS">PCS</option></select>
                 <input type="number" id="itemRate" placeholder="Rate">
             </div>
-            <textarea id="itemSpecs" rows="2" style="margin-top:10px;" placeholder="Specifications..."></textarea>
+            <textarea id="itemSpecs" rows="2" style="margin-top:10px;" placeholder="Detailed Specifications..."></textarea>
             
             <div class="button-group">
                 <button class="btn btn-add" onclick="addItem()">Add Item</button>
@@ -130,61 +134,61 @@
             </div>
         </div>
 
-        <div id="quote-paper">
-            <header class="header">
-                <div class="header-left">
-                    <div class="logo-container"><img src="B (1).png" alt="Balaji Fabrication Logo"></div>
-                    <div class="brand-info">
-                        <h1 class="brand-h1">Balaji Fabrication<br>& Hardware</h1>
-                        <div class="exp-line">Serving with 20+ years of quality excellence </div>
-                        <p class="proprietor" style="font-weight:700; font-size:11px; margin-top:3px;">Proprietor: Birbal Ram </p>
-                        <div style="font-size: 10px; font-weight: 700; border: 1.5px solid var(--brand-orange); padding: 2px 6px; display: inline-block; margin-top:4px; border-radius: 4px;">GSTIN: 29BGHP*****R3** </div>
+        <div class="doc-wrapper">
+            <div id="quote-paper">
+                <header class="header">
+                    <div class="header-left">
+                        <div class="logo-container"><img src="B (1).png" alt="Balaji Fabrication Logo"></div>
+                        <div class="brand-info">
+                            <h1 class="brand-h1">Balaji Fabrication<br>& Hardware</h1>
+                            <div class="exp-line">Serving with 20+ years of quality excellence </div>
+                            <p class="proprietor" style="font-weight:700; font-size:11px; margin-top:3px;">Proprietor: Birbal Ram </p>
+                            <div style="font-size: 10px; font-weight: 700; border: 1.5px solid var(--brand-orange); padding: 2px 6px; display: inline-block; margin-top:4px; border-radius: 4px;">GSTIN: 29BGHP*****R3** </div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <p><strong>Mob:</strong> 9886****89, 82099****1 </p>
+                        <p>Flat No.900, Huskur Road, Karnataka </p>
+                        <p style="margin-top: 5px;"><strong>Date:</strong> <span id="qDate"></span></p>
+                        <p><strong>Quote ID:</strong> <span id="qNum">BFH-NEW</span></p>
+                    </div>
+                </header>
+
+                <div class="address-grid">
+                    <div class="addr-box">
+                        <h4>Quotation For</h4>
+                        <p><strong id="dispClientName">Valued Customer</strong></p>
+                        <p id="dispClientAddr">Site Address Details</p>
+                    </div>
+                    <div class="addr-box" style="text-align: right;">
+                        <h4>Specialization </h4>
+                        <p>SS Glass/Wood Railings, HPL Gates</p>
+                        <p>PVD & Powder Coating Works</p>
                     </div>
                 </div>
-                <div class="header-right">
-                    <p><strong>Mob:</strong> 9886****89, 82099****1 </p>
-                    <p>Flat No.900, Huskur Road, Karnataka </p>
-                    <p style="margin-top: 5px;"><strong>Date:</strong> <span id="qDate"></span></p>
-                    <p><strong>Quote ID:</strong> <span id="qNum">BFH-NEW</span></p>
-                </div>
-            </header>
 
-            <div class="address-grid">
-                <div class="addr-box">
-                    <h4>Quotation For</h4>
-                    <p><strong id="dispClientName">Valued Customer</strong></p>
-                    <p id="dispClientAddr">Site Address Details</p>
-                </div>
-                <div class="addr-box" style="text-align: right;">
-                    <h4>Specialization </h4>
-                    <p>SS Glass/Wood Railings, HPL Gates</p>
-                    <p>PVD & Powder Coating Works</p>
-                </div>
-            </div>
+                <div class="centered-title"><h2>QUOTATION</h2></div>
 
-            <div class="centered-title"><h2>QUOTATION</h2></div>
-
-            <div class="table-wrap">
                 <table class="items-table">
                     <thead><tr><th>Description & Specs</th><th>Qty</th><th>Unit</th><th>Rate</th><th style="text-align:right;">Total</th><th class="del-btn"></th></tr></thead>
                     <tbody id="tableBody"></tbody>
                 </table>
-            </div>
 
-            <div class="financials">
-                <div class="fin-table">
-                    <div class="fin-row"><span>Subtotal</span><span id="subTotal">₹0.00</span></div>
-                    <div class="fin-row"><span>GST (18%)</span><span id="gstTotal">₹0.00</span></div>
-                    <div class="fin-row grand-total"><span>Grand Total</span><span id="grandTotal">₹0.00</span></div>
+                <div class="financials">
+                    <div class="fin-table">
+                        <div class="fin-row"><span>Subtotal</span><span id="subTotal">₹0.00</span></div>
+                        <div class="fin-row"><span>GST (18%)</span><span id="gstTotal">₹0.00</span></div>
+                        <div class="fin-row grand-total"><span>Grand Total</span><span id="grandTotal">₹0.00</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="premium-footer">
-                <div class="terms">
-                    <h5 style="margin:0 0 5px 0; color:var(--brand-orange);">Terms & Conditions </h5>
-                    <p>1. Crafted with <strong>100% Genuine Jindal Material</strong> for quality. </p>
-                    <p>2. 50% Advance with order; balance upon completion at site. </p>
-                    <p>3. Quote valid for 15 days. Final billing based on site measurements. </p>
+                <div class="premium-footer">
+                    <div class="terms">
+                        <h5 style="margin:0 0 5px 0; color:var(--brand-orange);">Terms & Conditions </h5>
+                        <p>1. Crafted with <strong>100% Genuine Jindal Material</strong> for quality. </p>
+                        <p>2. 50% Advance with order; balance upon completion at site. </p>
+                        <p>3. Quote valid for 15 days. Final billing based on site measurements. </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -313,10 +317,8 @@
             const quoteIdSuffix = document.getElementById('manualQuoteId').value || "NEW";
             const fullId = "BFH-" + quoteIdSuffix;
             const originalTitle = document.title;
-            // Set document title to the Quote ID to control the PDF filename
             document.title = fullId;
             window.print();
-            // Restore original title after print dialog closes
             setTimeout(() => { document.title = originalTitle; }, 100);
         }
 
