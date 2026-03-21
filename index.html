@@ -286,7 +286,8 @@
             if(items.length === 0) return alert("Add items first.");
             const quoteData = { id: document.getElementById('qNum').innerText, client: document.getElementById('clientName').value, addr: document.getElementById('clientAddr').value, items: items };
             const baseUrl = window.location.href.split('?')[0];
-            const encodedData = btoa(JSON.stringify(quoteData));
+            // FIXED: Using UTF-8 safe encoding for symbols like ₹
+            const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(quoteData))));
             const finalUrl = `${baseUrl}?share=${encodedData}`;
             document.getElementById('qr-code-container').innerHTML = "";
             new QRCode(document.getElementById('qr-code-container'), { text: finalUrl, width: 200, height: 200 });
@@ -300,7 +301,8 @@
             const shareData = urlParams.get('share');
             if(shareData) {
                 try {
-                    const decoded = JSON.parse(atob(shareData));
+                    // FIXED: Using UTF-8 safe decoding
+                    const decoded = JSON.parse(decodeURIComponent(escape(atob(shareData))));
                     document.getElementById('qNum').innerText = decoded.id;
                     document.getElementById('dispClientName').innerText = decoded.client;
                     document.getElementById('dispClientAddr').innerText = decoded.addr;
@@ -311,7 +313,7 @@
                     document.getElementById('cust-print-btn').style.display = "block";
                     document.querySelectorAll('.del-btn').forEach(el => el.style.display = "none");
                     document.title = decoded.id + "_Quote";
-                } catch(e) { console.error("Error"); }
+                } catch(e) { console.error("Error loading scanned quote"); }
             }
         };
 
