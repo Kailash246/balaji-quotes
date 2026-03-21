@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balaji Fabrication | Responsive Quote Software</title>
+    <title>Balaji Fabrication | Quote Software</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -11,19 +11,15 @@
         * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
         body { font-family: 'Inter', sans-serif; background: #cbd5e1; margin: 0; padding: 10px; color: var(--primary); font-size: 13px; }
 
-        /* Navigation & Containers */
         .nav-tabs { max-width: 1000px; margin: 0 auto 10px auto; display: flex; gap: 5px; }
         .tab-btn { padding: 10px 15px; border: none; background: #94a3b8; color: white; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 700; font-size: 12px; }
         .tab-btn.active { background: #fff; color: var(--brand-orange); }
 
         .admin-panel { max-width: 1000px; margin: 0 auto 20px auto; background: #fff; padding: 20px; border-radius: 0 12px 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        /* Form Layouts */
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
         .input-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
         input, select, textarea { padding: 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; width: 100%; }
         
-        /* Buttons in One Line */
         .button-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
         .btn { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; color: white; }
         .btn-add { background: var(--brand-orange); }
@@ -31,28 +27,25 @@
         .btn-qr { background: #6366f1; }
         .btn-print { background: var(--primary); }
 
-        /* History Table UI & Colored Buttons */
         .history-container { overflow-x: auto; max-width: 1000px; margin: 0 auto; }
         .history-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; }
         .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
         .history-table th { background: var(--primary); color: white; font-size: 11px; text-transform: uppercase; }
         
-        .action-btn { padding: 5px 10px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; color: white; font-weight: 700; margin-right: 5px; }
-        .btn-edit { background: #6366f1 !important; } /* Indigo */
-        .btn-del { background: #ef4444 !important; }  /* Red */
+        .action-btn { padding: 6px 12px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; color: white; font-weight: 700; margin-right: 5px; }
+        .btn-edit { background: #6366f1 !important; }
+        .btn-del { background: #ef4444 !important; }
 
-        /* QR Modal */
-        #qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; color: white; padding: 20px; }
+        #qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; color: white; padding: 20px; text-align: center;}
         #qr-code-container { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
 
-        /* Quote Document Styling */
         .doc-wrapper { overflow-x: auto; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-        #quote-paper { width: 210mm; min-width: 210mm; min-height: 297mm; margin: 0 auto; background: white; padding: 30px 40px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #quote-paper { width: 210mm; min-width: 210mm; min-height: 297mm; background: white; padding: 40px 50px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         #quote-paper::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: var(--brand-orange); }
 
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .logo-container img { height: 80px; width: auto; }
+        .logo-container img { height: 100px; width: auto; }
         .brand-h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; color: var(--primary); line-height: 1.1; }
         .exp-line { color: var(--brand-orange); font-weight: 700; font-size: 10px; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
         .header-right { text-align: right; font-size: 11px; line-height: 1.4; color: var(--slate); }
@@ -67,12 +60,11 @@
         table.items-table { width: 100%; border-collapse: collapse; min-width: 600px; }
         .items-table th { text-align: left; padding: 10px 8px; font-size: 10px; text-transform: uppercase; color: var(--slate); border-bottom: 2px solid var(--primary); }
         .items-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; font-size: 12px; vertical-align: top; }
-        .item-specs { font-size: 10px; color: var(--slate); font-weight: 400; margin-top: 3px; display: block; line-height: 1.2; font-style: italic; }
 
         .financials { display: flex; justify-content: flex-end; margin-top: 15px; }
-        .fin-table { width: 220px; }
-        .fin-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12px; }
-        .grand-total { border-top: 2px solid var(--brand-orange); margin-top: 8px; padding-top: 8px; font-size: 17px; font-weight: 800; }
+        .fin-table { width: 250px; text-align: right; }
+        .grand-total { border-top: 2px solid var(--brand-orange); margin-top: 8px; padding-top: 8px; font-size: 19px; font-weight: 800; display: flex; justify-content: space-between; }
+        .gst-note { font-size: 11px; color: var(--slate); font-weight: 500; margin-top: 4px; display: block; }
 
         .premium-footer { margin-top: 30px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; }
         .terms p { margin: 2px 0; font-size: 10px; color: var(--slate); line-height: 1.4; }
@@ -80,7 +72,6 @@
         @media (max-width: 768px) {
             .input-row { grid-template-columns: 1fr 1fr; }
             .button-group { flex-direction: column; }
-            .btn { width: 100%; }
             .history-table thead { display: none; }
             .history-table, .history-table tbody, .history-table tr, .history-table td { display: block; width: 100%; }
             .history-table tr { margin-bottom: 15px; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; background: white; }
@@ -102,8 +93,8 @@
 
     <div id="qr-modal" onclick="closeQR()">
         <div id="qr-code-container"></div>
-        <p style="font-weight: bold;">Scan to Share Quote (Secure Mode)</p>
-        <button class="btn btn-print" style="margin-top: 10px; min-width: 100px;">Close</button>
+        <p style="font-weight: bold;">Scan to Share Secure Quote</p>
+        <button class="btn btn-print" style="margin-top: 10px; min-width: 100px;">Close Window</button>
     </div>
 
     <div class="nav-tabs" id="mainNav">
@@ -124,15 +115,10 @@
             <div class="input-row">
                 <input type="text" id="itemDesc" placeholder="Description">
                 <input type="number" id="itemQty" placeholder="Qty">
-                <select id="itemUnit">
-                    <option value="RFT">RFT</option>
-                    <option value="SQFT">SQFT</option>
-                    <option value="KG">KG</option>
-                    <option value="PCS">PCS</option>
-                </select>
+                <select id="itemUnit"><option value="RFT">RFT</option><option value="SQFT">SQFT</option><option value="KG">KG</option><option value="PCS">PCS</option></select>
                 <input type="number" id="itemRate" placeholder="Rate">
             </div>
-            <textarea id="itemSpecs" rows="2" style="margin-top:10px;" placeholder="Specifications..."></textarea>
+            <textarea id="itemSpecs" rows="2" style="margin-top:10px;" placeholder="Detailed Specifications..."></textarea>
             
             <div class="button-group">
                 <button class="btn btn-add" onclick="addItem()">Add Item</button>
@@ -143,7 +129,7 @@
         </div>
 
         <div id="cust-print-btn" onclick="preparePrint()" style="display:none; text-align:center; padding: 20px;">
-            <button class="btn btn-print" style="max-width:300px;">Download Quote PDF</button>
+            <button class="btn btn-print" style="max-width:300px;">Download Quotation PDF</button>
         </div>
 
         <div class="doc-wrapper">
@@ -155,34 +141,36 @@
                             <h1 class="brand-h1">Balaji Fabrication<br>& Hardware</h1>
                             <div class="exp-line">Serving with 20+ years of quality excellence </div>
                             <p class="proprietor" style="font-weight:700; font-size:11px; margin-top:3px;">Proprietor: Birbal Ram </p>
-                            <div style="font-size: 10px; font-weight: 700; border: 1.5px solid var(--brand-orange); padding: 2px 6px; display: inline-block; margin-top:4px; border-radius: 4px;">GSTIN: 29BGHP*****R3** </div>
+                            <div style="font-size: 10px; font-weight: 700; border: 1.5px solid var(--brand-orange); padding: 2px 6px; display: inline-block; margin-top:4px; border-radius: 4px;">GSTIN: 29BGHPR6919R3Z5 </div>
                         </div>
                     </div>
                     <div class="header-right">
-                        <p><strong>Mob:</strong> 9886****89, 82099****1 </p>
-                        <p>Flat No.900, Huskur Road, Karnataka </p>
+                        <p><strong>Mob:</strong> 9886870889, 8209965901 </p>
+                        <p>Flat No.900, Singena Agrahara, <br>Bengaluru Urban, Karnataka – 560099</p>
                         <p style="margin-top: 5px;"><strong>Date:</strong> <span id="qDate"></span></p>
                         <p><strong>Quote ID:</strong> <span id="qNum">BFH-NEW</span></p>
                     </div>
                 </header>
 
                 <div class="address-grid">
-                    <div class="addr-box"><h4>Quotation For</h4><p><strong id="dispClientName">Valued Customer</strong></p><p id="dispClientAddr">Site Details</p></div>
-                    <div class="addr-box" style="text-align: right;"><h4>Specialization </h4><p>SS Railings, HPL Gates, PVD Works</p></div>
+                    <div class="addr-box"><h4>Quotation For</h4><p><strong id="dispClientName">Valued Customer</strong></p><p id="dispClientAddr">Site Address Details</p></div>
+                    <div class="addr-box" style="text-align: right;"><h4>Specialization </h4><p>SS Glass/Wood Railings, HPL Gates <br> PVD & Powder Coating Works</p></div>
                 </div>
 
                 <div class="centered-title"><h2>QUOTATION</h2></div>
 
                 <table class="items-table">
-                    <thead><tr><th>Description & Specs</th><th>Qty</th><th>Unit</th><th>Rate</th><th style="text-align:right;">Total</th><th class="del-btn"></th></tr></thead>
+                    <thead><tr><th style="width: 50%;">Description & Specs</th><th>Qty</th><th>Unit</th><th>Rate</th><th style="text-align:right;">Total</th><th class="del-btn"></th></tr></thead>
                     <tbody id="tableBody"></tbody>
                 </table>
 
                 <div class="financials">
                     <div class="fin-table">
-                        <div class="fin-row"><span>Subtotal</span><span id="subTotal">₹0.00</span></div>
-                        <div class="fin-row"><span>GST (18%)</span><span id="gstTotal">₹0.00</span></div>
-                        <div class="fin-row grand-total"><span>Grand Total</span><span id="grandTotal">₹0.00</span></div>
+                        <div class="grand-total">
+                            <span>Total Amount</span>
+                            <span id="grandTotal">₹0.00</span>
+                        </div>
+                        <span class="gst-note">*extra 18% GST applicable</span>
                     </div>
                 </div>
 
@@ -200,12 +188,7 @@
 
     <div id="history-view" style="display: none; max-width: 1000px; margin: 0 auto;">
         <h3 style="color: var(--primary);">Saved Quote History</h3>
-        <div class="history-container">
-            <table class="history-table">
-                <thead><tr><th>Quote ID</th><th>Date</th><th>Customer</th><th>Amount</th><th>Actions</th></tr></thead>
-                <tbody id="historyBody"></tbody>
-            </table>
-        </div>
+        <div class="history-container"><table class="history-table"><thead><tr><th>Quote ID</th><th>Date</th><th>Customer</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="historyBody"></tbody></table></div>
     </div>
 
     <script>
@@ -251,22 +234,19 @@
             let sub = 0;
             items.forEach((item, i) => {
                 sub += item.total;
-                body.innerHTML += `<tr><td><strong>${item.desc}</strong>${item.specs ? `<br><small class="item-specs">${item.specs}</small>` : ''}</td>
+                body.innerHTML += `<tr><td><strong>${item.desc}</strong>${item.specs ? `<br><small style="color:var(--slate);">${item.specs}</small>` : ''}</td>
                     <td>${item.qty}</td><td>${item.unit}</td><td>₹${item.rate.toLocaleString('en-IN')}</td>
                     <td style="text-align:right;"><strong>₹${item.total.toLocaleString('en-IN')}</strong></td>
                     <td class="del-btn" onclick="removeItem(${i})" style="color:red; cursor:pointer;">✕</td></tr>`;
             });
-            const gst = sub * 0.18;
-            document.getElementById('subTotal').innerText = `₹${sub.toLocaleString('en-IN')}`;
-            document.getElementById('gstTotal').innerText = `₹${gst.toLocaleString('en-IN')}`;
-            document.getElementById('grandTotal').innerText = `₹${(sub + gst).toLocaleString('en-IN')}`;
+            document.getElementById('grandTotal').innerText = `₹${sub.toLocaleString('en-IN')}`;
         }
 
         function removeItem(idx) { items.splice(idx, 1); renderItems(); }
 
         function saveQuote() {
             const quoteIdSuffix = document.getElementById('manualQuoteId').value;
-            if(!quoteIdSuffix || items.length === 0) return alert("Quote ID and Items required.");
+            if(!quoteIdSuffix || items.length === 0) return alert("Quote ID required.");
             const fullQuoteId = "BFH-" + quoteIdSuffix;
             const quoteData = { id: fullQuoteId, date: new Date().toLocaleDateString('en-IN'), client: document.getElementById('clientName').value, addr: document.getElementById('clientAddr').value, items, total: document.getElementById('grandTotal').innerText };
             const index = quotesDb.findIndex(q => q.id === fullQuoteId);
@@ -331,7 +311,7 @@
                     document.getElementById('cust-print-btn').style.display = "block";
                     document.querySelectorAll('.del-btn').forEach(el => el.style.display = "none");
                     document.title = decoded.id + "_Quote";
-                } catch(e) { console.error("Invalid QR Link"); }
+                } catch(e) { console.error("Error"); }
             }
         };
 
