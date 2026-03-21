@@ -282,16 +282,32 @@
             setTimeout(() => { document.title = originalTitle; }, 500);
         }
 
+        // IMPROVED QR GENERATION (HANDLES MULTIPLE ITEMS)
         function generateQR() {
             if(items.length === 0) return alert("Add items first.");
-            const quoteData = { id: document.getElementById('qNum').innerText, client: document.getElementById('clientName').value, addr: document.getElementById('clientAddr').value, items: items };
+            // Shortening key names to save space (q=id, c=client, a=addr, i=items)
+            const compressedData = {
+                q: document.getElementById('qNum').innerText,
+                c: document.getElementById('clientName').value,
+                a: document.getElementById('clientAddr').value,
+                i: items.map(x => [x.desc, x.specs, x.qty, x.unit, x.rate]) // Convert to array to save more space
+            };
             const baseUrl = window.location.href.split('?')[0];
-            // FIXED: Using UTF-8 safe encoding for symbols like ₹
-            const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(quoteData))));
+            const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(compressedData))));
             const finalUrl = `${baseUrl}?share=${encodedData}`;
+
             document.getElementById('qr-code-container').innerHTML = "";
-            new QRCode(document.getElementById('qr-code-container'), { text: finalUrl, width: 200, height: 200 });
-            document.getElementById('qr-modal').style.display = "flex";
+            try {
+                new QRCode(document.getElementById('qr-code-container'), { 
+                    text: finalUrl, 
+                    width: 240, 
+                    height: 240,
+                    correctLevel: QRCode.CorrectLevel.L // Low error correction = more data capacity
+                });
+                document.getElementById('qr-modal').style.display = "flex";
+            } catch(e) {
+                alert("Too many items for one QR code. Try saving as PDF instead.");
+            }
         }
 
         function closeQR() { document.getElementById('qr-modal').style.display = "none"; }
@@ -301,18 +317,18 @@
             const shareData = urlParams.get('share');
             if(shareData) {
                 try {
-                    // FIXED: Using UTF-8 safe decoding
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(shareData))));
-                    document.getElementById('qNum').innerText = decoded.id;
-                    document.getElementById('dispClientName').innerText = decoded.client;
-                    document.getElementById('dispClientAddr').innerText = decoded.addr;
-                    items = decoded.items;
+                    // Handling the new shortened array format
+                    document.getElementById('qNum').innerText = decoded.q;
+                    document.getElementById('dispClientName').innerText = decoded.c;
+                    document.getElementById('dispClientAddr').innerText = decoded.a;
+                    items = decoded.i.map(x => ({ desc: x[0], specs: x[1], qty: x[2], unit: x[3], rate: x[4], total: x[2]*x[4] }));
                     renderItems();
                     document.getElementById('mainNav').style.display = "none"; 
                     document.getElementById('adminPanel').style.display = "none";
                     document.getElementById('cust-print-btn').style.display = "block";
                     document.querySelectorAll('.del-btn').forEach(el => el.style.display = "none");
-                    document.title = decoded.id + "_Quote";
+                    document.title = decoded.q + "_Quote";
                 } catch(e) { console.error("Error loading scanned quote"); }
             }
         };
